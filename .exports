@@ -1,0 +1,22 @@
+# general
+export EDITOR=nano
+export CLICOLOR_FORCE=1
+
+# drone-ci
+export DRONE_PERSONAL_GITHUB_TOKEN=""
+export DRONE_PERSONAL_BITBUCKET_TOKEN=""
+export DRONE_PERSONAL_GITHUB_URL=""
+export DRONE_PERSONAL_BITBUCKET_URL=""
+
+# google cloud sdk
+export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+
+# mobile development
+export JAVA_HOME=$(/usr/libexec/java_home)
+export ANDROID_HOME=/usr/local/opt/android-sdk
+
+# prompt colors
+export PROMPT='🍺  $FG[115]${PWD##*/} % $FG[003]$(git branch 2>/dev/null) % $FG[001]'
