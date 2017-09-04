@@ -70,13 +70,6 @@ function ts_nodemon() {
   nodemon -w '**/*.ts' -x 'ts-node' $1
 }
 
-function get_cwd_git_status() {
-  BRANCH=$(git branch --color=never 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/' | cat)
-  STATUS=""
-
-  if [[ `git status --porcelain 2>/dev/null` ]]; then
-    STATUS="+"
-  fi
-
-  echo "$BRANCH$STATUS "
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
