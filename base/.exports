@@ -2,12 +2,6 @@
 export EDITOR=nano
 export CLICOLOR_FORCE=1
 
-# drone-ci
-export DRONE_PERSONAL_GITHUB_TOKEN=""
-export DRONE_PERSONAL_BITBUCKET_TOKEN=""
-export DRONE_PERSONAL_GITHUB_URL=""
-export DRONE_PERSONAL_BITBUCKET_URL=""
-
 # google cloud sdk
 export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 
@@ -15,8 +9,13 @@ export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 
 # mobile development
-export JAVA_HOME=$(/usr/libexec/java_home)
-export ANDROID_HOME=/usr/local/opt/android-sdk
+if [ -f /usr/libexec/java_home ] ; then
+  export JAVA_HOME=$(/usr/libexec/java_home)
+fi
+
+if [ -f /usr/local/opt/android-sdk ] ; then
+  export ANDROID_HOME=/usr/local/opt/android-sdk
+fi
 
 # prompt colors
 export PROMPT='🍺  $FG[115]${PWD##*/}% $FG[001]$(get_cwd_git_status)% $FG[001]> % $FG[007]'

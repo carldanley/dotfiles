@@ -1,7 +1,3 @@
-# drone-ci
-alias bbdrone="$(which drone) -t $DRONE_PERSONAL_BITBUCKET_TOKEN -s $DRONE_PERSONAL_BITBUCKET_URL $1"
-alias ghdrone="$(which drone) -t $DRONE_PERSONAL_GITHUB_TOKEN -s $DRONE_PERSONAL_GITHUB_URL $1"
-
 # helpers
 alias ls='ls -la'
 alias cat='pygmentize -O style=monokai -f console256 -g' # sudo easy_install Pygments
