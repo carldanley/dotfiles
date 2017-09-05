@@ -4,6 +4,9 @@
 . ~/dotfiles/base/.aliases
 . ~/dotfiles/base/.functions
 
+# register the global gitignore commands
+git config --global core.excludesfile ~/dotfiles/.gitignore
+
 # source the custom scripts
 if [ ~/dotfiles/custom/.exports ] ; then
   . ~/dotfiles/custom/.exports

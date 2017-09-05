@@ -21,6 +21,8 @@ Run the following:
 1. `cd ~`
 1. `git clone git@github.com:carldanley/dotfiles.git`
 1. `echo ". ~/dotfiles/entrypoint.sh" >> ~/.bash_profile`
+1. `./.osx`
+1. `./brew.sh`
 
 ## iTerm2 Colors
 
