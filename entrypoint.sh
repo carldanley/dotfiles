@@ -8,15 +8,20 @@
 git config --global core.excludesfile ~/dotfiles/.gitignore
 
 # source the custom scripts
-if [ ~/dotfiles/custom/.exports ] ; then
+if [ -f ~/dotfiles/custom/.exports ] ; then
   . ~/dotfiles/custom/.exports
 fi
-if [ ~/dotfiles/custom/.imports ] ; then
+if [ -f ~/dotfiles/custom/.imports ] ; then
   . ~/dotfiles/custom/.imports
 fi
-if [ ~/dotfiles/custom/.aliases ] ; then
+if [ -f ~/dotfiles/custom/.aliases ] ; then
   . ~/dotfiles/custom/.aliases
 fi
-if [ ~/dotfiles/custom/.functions ] ; then
+if [ -f ~/dotfiles/custom/.functions ] ; then
   . ~/dotfiles/custom/.functions
+fi
+
+# make sure nvm directory exists
+if [ ! -d ~/.nvm ] ; then
+  mkdir ~/.nvm
 fi
