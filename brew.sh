@@ -34,12 +34,6 @@ brew install homebrew/dupes/grep
 brew install homebrew/dupes/openssh
 brew install homebrew/dupes/screen
 
-# run this script when this file changes guy.
-brew install entr
-
-# github util. gotta love `hub fork`, `hub create`, `hub checkout <PRurl>`
-brew install hub
-
 # Install other useful binaries
 brew install git
 brew install imagemagick --with-webp
