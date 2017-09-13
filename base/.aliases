@@ -10,3 +10,5 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 alias weather='curl -4 http://wttr.in/Miami'
 alias moon='curl -4 http://wttr.in/Moon'
 
+# virtualbox
+alias ssh_vm_k8s="ssh carldanley@192.168.56.101"
