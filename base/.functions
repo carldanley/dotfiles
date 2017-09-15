@@ -1,4 +1,6 @@
-function whois() {
+#!/bin/bash
+
+whois() {
   local domain=$(echo "$1" | awk -F/ '{print $3}') # get domain from URL
 
   if [ -z $domain ] ; then
@@ -13,7 +15,7 @@ function whois() {
   /usr/bin/whois -h whois.internic.net $domain | sed '/NOTICE:/q'
 }
 
-function extract() {
+extract() {
   if [ -f "$1" ] ; then
     local filename=$(basename "$1")
     local foldername="${filename%%.*}"
@@ -52,7 +54,7 @@ function extract() {
   fi
 }
 
-function gifify() {
+gifify() {
   if [[ -n "$1" ]]; then
     if [[ $2 == '--good' ]]; then
       ffmpeg -i $1 -r 10 -vcodec png out-static-%05d.png
@@ -66,10 +68,10 @@ function gifify() {
   fi
 }
 
-function ts_nodemon() {
+ts_nodemon() {
   nodemon -w '**/*.ts' -x 'ts-node' $1
 }
 
-function parse_git_branch() {
+parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }

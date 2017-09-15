@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # source the base scripts
 . ~/dotfiles/base/.exports
 . ~/dotfiles/base/.imports

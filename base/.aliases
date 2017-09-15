@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # helpers
 alias ls='ls -la'
 alias cat='pygmentize -O style=monokai -f console256 -g' # sudo easy_install Pygments

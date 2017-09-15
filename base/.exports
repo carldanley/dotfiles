@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # general
 export EDITOR=nano
 export TERM=xterm-color
