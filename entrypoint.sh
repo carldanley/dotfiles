@@ -27,3 +27,8 @@ fi
 if [ ! -d ~/.nvm ] ; then
   mkdir ~/.nvm
 fi
+
+# make sure the go directory exists
+if [ ! -d ~/.go/src/github.com/carldanley ] ; then
+  mkdir -p ~/.go/src/github.com/carldanley
+fi

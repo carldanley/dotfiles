@@ -41,5 +41,8 @@ brew install ffmpeg --with-libvpx
 brew install terminal-notifier
 brew install openconnect
 
+# Install go
+brew install go
+
 # Remove outdated versions from the cellar
 brew cleanup

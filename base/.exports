@@ -43,3 +43,7 @@ fi
 
 # prompt colors
 export PS1="🍺  \[${COLOR_LIGHT_CYAN}\]\${PWD##*/}\[${COLOR_YELLOW}\]\$(parse_git_branch) \[${COLOR_YELLOW}\]→\[${COLOR_NOCOLOR}\] "
+
+# go
+export GOPATH=$HOME/.go
+export PATH=$PATH:$GOPATH/bin
