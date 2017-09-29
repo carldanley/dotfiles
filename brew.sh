@@ -41,6 +41,9 @@ brew install ffmpeg --with-libvpx
 brew install terminal-notifier
 brew install openconnect
 
+# Install exa (https://the.exa.website/)
+brew install exa
+
 # Install go
 brew install go
 

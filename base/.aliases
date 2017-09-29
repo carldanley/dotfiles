@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # helpers
-alias ls='ls -la'
+alias ls='exa -la'
 alias cat='pygmentize -O style=monokai -f console256 -g' # sudo easy_install Pygments
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
