@@ -47,5 +47,8 @@ brew install exa
 # Install go
 brew install go
 
+# Install kubernetes
+brew install kubernetes-cli
+
 # Remove outdated versions from the cellar
 brew cleanup
