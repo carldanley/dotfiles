@@ -7,3 +7,6 @@
 if [ -f "/usr/local/opt/nvm/nvm.sh" ] ; then
   . "/usr/local/opt/nvm/nvm.sh"
 fi
+
+# bash completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion

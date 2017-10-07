@@ -45,5 +45,14 @@ fi
 export PS1="🍺  \[${COLOR_LIGHT_CYAN}\]\${PWD##*/}\[${COLOR_YELLOW}\]\$(parse_git_branch) \[${COLOR_YELLOW}\]→\[${COLOR_NOCOLOR}\] "
 
 # go
-export GOPATH=$HOME/.go
-export PATH=$PATH:$GOPATH/bin
+export GOPATH="$HOME/.go"
+export PATH="$PATH:$GOPATH/bin"
+
+# coreutils
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+
+# findutils
+export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
+export MANPATH="/usr/local/opt/findutils/libexec/gnuman:$MANPATH"
+
