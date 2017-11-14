@@ -10,3 +10,6 @@ fi
 
 # bash completion
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+# kubernetes auto completion
+source <(kubectl completion bash)
