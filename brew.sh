@@ -50,5 +50,8 @@ brew install go
 # Install kubernetes
 brew install kubernetes-cli
 
+# Install tldr
+brew install tldr
+
 # Remove outdated versions from the cellar
 brew cleanup
