@@ -19,4 +19,4 @@ alias kubeconfig_stash="cp ~/.kube/config ~/.kube/config.stash"
 alias kubeconfig_stash_pop="cp ~/.kube/config.stash ~/.kube/config"
 
 # go helpers
-alias gocd="mkdir -p $GOPATH/src/github.com/carldanley && cd $GOPATH/src/github.com/carldanley"
+alias cdgo="cd $GOPATH"
