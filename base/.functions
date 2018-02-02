@@ -96,3 +96,19 @@ docker_run_mysql() {
   # make sure the docker container is started
   docker start ${CONTAINER_NAME}
 }
+
+docker_run_redis() {
+  IMAGE="redis:alpine"
+  PORT="6379"
+  STORAGE_PATH="${HOME}/.dotfiles/redis"
+  CONTAINER_NAME="redis"
+
+  # create storage path if it doesn't exist
+  [ ! -d ${STORAGE_PATH} ] && mkdir -p ${STORAGE_PATH}
+
+  # create the docker container if it doesn't exist
+  [ ! "$(docker ps -a | grep ${CONTAINER_NAME})" ] && docker run -d --name ${CONTAINER_NAME} -p ${PORT}:6379 -v ${STORAGE_PATH}:/data ${IMAGE}
+
+  # make sure the docker container is started
+  docker start ${CONTAINER_NAME}
+}
