@@ -149,3 +149,7 @@ valid_ip() {
   fi
   return $stat
 }
+
+kubectl_install_tools() {
+  kubectl run tools --image=amouat/network-utils sleep 9000000
+}
