@@ -85,7 +85,7 @@ docker_run_mysql() {
   PORT="3306"
   STORAGE_PATH="${HOME}/.dotfiles/mysql"
   ROOT_PASSWORD="root"
-  CONTAINER_NAME="mysql"
+  CONTAINER_NAME="mysql:5.7"
 
   # create storage path if it doesn't exist
   [ ! -d ${STORAGE_PATH} ] && mkdir -p ${STORAGE_PATH}
