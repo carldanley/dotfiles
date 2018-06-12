@@ -81,11 +81,11 @@ get_current_kubectl_context() {
 }
 
 docker_run_mysql() {
-  IMAGE="mysql"
+  IMAGE="mysql:5.7"
   PORT="3306"
   STORAGE_PATH="${HOME}/.dotfiles/mysql"
   ROOT_PASSWORD="root"
-  CONTAINER_NAME="mysql:5.7"
+  CONTAINER_NAME="mysql"
 
   # create storage path if it doesn't exist
   [ ! -d ${STORAGE_PATH} ] && mkdir -p ${STORAGE_PATH}
