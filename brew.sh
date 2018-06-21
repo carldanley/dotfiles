@@ -49,6 +49,7 @@ brew install go
 
 # Install kubernetes
 brew install kubernetes-cli
+brew install kubernetes-helm
 
 # Install tldr
 brew install tldr
