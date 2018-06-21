@@ -55,3 +55,9 @@ brew install tldr
 
 # Remove outdated versions from the cellar
 brew cleanup
+
+# install tools for gpg
+brew install gnupg gnupg2
+
+# install terraform
+brew install terraform

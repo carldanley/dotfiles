@@ -47,3 +47,6 @@ export PS1="🍺 \[${COLOR_LIGHT_CYAN}\]\${PWD##*/}\[${COLOR_YELLOW}\]\$(parse_g
 # go
 export GOPATH="$HOME/.go"
 export PATH="$PATH:$GOPATH/bin"
+
+# gpg
+export GPG_TTY=$(tty)
