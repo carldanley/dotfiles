@@ -140,12 +140,13 @@ docker_run_nats_streaming() {
   MONITORING_PORT="8222"
   STORAGE_PATH="${HOME}/.dotfiles/nats-streaming"
   CONTAINER_NAME="nats-streaming"
+  CLUSTER_NAME="radium"
 
   # create storage path if it doesn't exist
   [ ! -d ${STORAGE_PATH} ] && mkdir -p ${STORAGE_PATH}
 
   # create the docker container if it doesn't exist
-  [ ! "$(docker ps -a | grep ${CONTAINER_NAME})" ] && docker run -d --name ${CONTAINER_NAME} --hostname ${CONTAINER_NAME} -p ${CLIENT_PORT}:4222 -p ${MONITORING_PORT}:8222 -v ${STORAGE_PATH}:/nats-streaming-storage ${IMAGE} -store file -dir /nats-streaming-storage -DV -m 8222
+  [ ! "$(docker ps -a | grep ${CONTAINER_NAME})" ] && docker run -d --name ${CONTAINER_NAME} --hostname ${CONTAINER_NAME} -p ${CLIENT_PORT}:4222 -p ${MONITORING_PORT}:8222 -v ${STORAGE_PATH}:/nats-streaming-storage ${IMAGE} -store file -dir /nats-streaming-storage -DV -SDV -m 8222 -cid ${CLUSTER_NAME}
 }
 
 valid_ip() {
