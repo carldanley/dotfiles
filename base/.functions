@@ -168,3 +168,10 @@ valid_ip() {
 kubectl_install_tools() {
   kubectl run tools --image=amouat/network-utils sleep 9000000
 }
+
+k8s_create_sa_and_config() {
+  SERVICE_ACCOUNT_NAME=$1
+  NAMESPACE=$2
+
+  $HOME/dotfiles/extra-scripts/create-service-account-and-kube-config.sh ${SERVICE_ACCOUNT_NAME} ${NAMESPACE}
+}
