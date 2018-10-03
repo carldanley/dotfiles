@@ -149,6 +149,23 @@ docker_run_nats_streaming() {
   [ ! "$(docker ps -a | grep ${CONTAINER_NAME})" ] && docker run -d --name ${CONTAINER_NAME} --hostname ${CONTAINER_NAME} -p ${CLIENT_PORT}:4222 -p ${MONITORING_PORT}:8222 -v ${STORAGE_PATH}:/nats-streaming-storage ${IMAGE} -store file -dir /nats-streaming-storage -DV -SDV -m 8222 -cid ${CLUSTER_NAME}
 }
 
+docker_run_minio() {
+  IMAGE="minio/minio"
+  PORT="9000"
+  STORAGE_PATH="${HOME}/.dotfiles/minio/storage"
+  CONFIG_PATH="${HOME}/.dotfiles/minio/config"
+  CONTAINER_NAME="minio"
+  ACCESS_KEY="root"
+  SECRET_KEY="12345678"
+
+  # create paths if it doesn't exist
+  [ ! -d ${STORAGE_PATH} ] && mkdir -p ${STORAGE_PATH}
+  [ ! -d ${CONFIG_PATH} ] && mkdir -p ${CONFIG_PATH}
+
+  # create the docker container if it doesn't exist
+  [ ! "$(docker ps -a | grep ${CONTAINER_NAME})" ] && docker run -d --name ${CONTAINER_NAME} -p ${PORT}:9000 -e "MINIO_ACCESS_KEY=${ACCESS_KEY}" -e "MINIO_SECRET_KEY=${SECRET_KEY}" -v ${STORAGE_PATH}:/data -v ${CONFIG_PATH}:/root/.minio ${IMAGE} server /data
+}
+
 valid_ip() {
   local  ip=$1
   local  stat=1
