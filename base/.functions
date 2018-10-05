@@ -192,3 +192,14 @@ k8s_create_sa_and_config() {
 
   $HOME/dotfiles/extra-scripts/create-service-account-and-kube-config.sh ${SERVICE_ACCOUNT_NAME} ${NAMESPACE}
 }
+
+scd() {
+  DIR="${1}"
+  LINK=$(readlink ${DIR})
+
+  if [[ "${LINK}" = "" ]]; then
+    cd ${DIR}
+  else
+    cd ${LINK}
+  fi
+}
