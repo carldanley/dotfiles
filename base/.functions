@@ -182,7 +182,7 @@ valid_ip() {
   return $stat
 }
 
-kubectl_install_tools() {
+k8s_install_tools() {
   kubectl run tools --image=amouat/network-utils sleep 9000000
 }
 
@@ -191,6 +191,10 @@ k8s_create_sa_and_config() {
   NAMESPACE=$2
 
   $HOME/dotfiles/extra-scripts/create-service-account-and-kube-config.sh ${SERVICE_ACCOUNT_NAME} ${NAMESPACE}
+}
+
+k8s_get_token() {
+  kubectl -n kube-system describe secrets `kubectl -n kube-system get secrets | awk '/clusterrole-aggregation-controller/ {print $1}'` | awk '/token:/ {print $2}'
 }
 
 scd() {
