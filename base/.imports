@@ -3,13 +3,12 @@
 # rupa/z
 . ~/dotfiles/extra-scripts/z.sh
 
-# nvm
-if [ -f "/usr/local/opt/nvm/nvm.sh" ] ; then
-  . "/usr/local/opt/nvm/nvm.sh"
-fi
-
 # bash completion
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
 # kubernetes auto completion
 source <(kubectl completion bash)
+
+# nvm
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"

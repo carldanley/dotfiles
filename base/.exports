@@ -29,18 +29,6 @@ export COLOR_LIGHT_GRAY='\e[0;37m'
 # google cloud sdk
 export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-
-# mobile development
-if [ -f /usr/libexec/java_home ] ; then
-  export JAVA_HOME=$(/usr/libexec/java_home)
-fi
-
-if [ -f /usr/local/opt/android-sdk ] ; then
-  export ANDROID_HOME=/usr/local/opt/android-sdk
-fi
-
 # prompt colors
 export PS1="🍺 \[${COLOR_LIGHT_CYAN}\]\${PWD##*/}\[${COLOR_YELLOW}\]\$(parse_git_branch) \[${COLOR_LIGHT_BLUE}\](\$(get_current_kubectl_context)) \[${COLOR_YELLOW}\]→\[${COLOR_NOCOLOR}\] "
 
@@ -50,3 +38,7 @@ export PATH="$PATH:$GOPATH/bin"
 
 # gpg
 export GPG_TTY=$(tty)
+
+# nvm
+export NPM_TOKEN=""
+export NVM_DIR="$HOME/.nvm"

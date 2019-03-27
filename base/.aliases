@@ -16,8 +16,6 @@ alias moon='curl -4 http://wttr.in/Moon'
 alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 
 # kubernetes commands
-alias kubeconfig_stash="cp ~/.kube/config ~/.kube/config.stash"
-alias kubeconfig_stash_pop="cp ~/.kube/config.stash ~/.kube/config"
 alias kctx="kubectl config use-context"
 alias k="kubectl"
 
