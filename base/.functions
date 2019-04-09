@@ -182,7 +182,7 @@ k8s_install_tools() {
   kubectl run tools --image=amouat/network-utils sleep 9000000
 }
 
-k8s_create_sa_and_config() {
+k8s_get_sa_config() {
   SERVICE_ACCOUNT_NAME=$1
   NAMESPACE=$2
 
