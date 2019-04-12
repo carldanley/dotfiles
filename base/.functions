@@ -203,3 +203,12 @@ cdsl() {
     cd ${LINK}
   fi
 }
+
+vault_login() {
+  ADDRESS=$1
+  USERNAME=$2
+
+  export VAULT_ADDR=$1
+  export VAULT_TOKEN=$(vault login -token-only -method=userpass username=$USERNAME)
+  vault status
+}
