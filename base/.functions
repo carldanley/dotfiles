@@ -212,3 +212,15 @@ vault_login() {
   export VAULT_TOKEN=$(vault login -token-only -method=userpass username=$USERNAME)
   vault status
 }
+
+h3() {
+  # cache the previous helm home variable
+  PREVIOUS_HELM_HOME=$HELM_HOME
+
+  # setup helm 3
+  export HELM_HOME=$HOME/.helm3
+  helm3 $*
+
+  # restore the previous helm home variable
+  export HELM_HOME=$PREVIOUS_HELM_HOME
+}
