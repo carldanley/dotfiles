@@ -225,7 +225,7 @@ h3() {
   export HELM_HOME=$PREVIOUS_HELM_HOME
 }
 
-htemplate() {
+helm_template() {
   REPO=${1}
   CHART=${2}
   ARGUMENTS=${@:3}
