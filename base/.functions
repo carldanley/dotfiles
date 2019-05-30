@@ -224,3 +224,15 @@ h3() {
   # restore the previous helm home variable
   export HELM_HOME=$PREVIOUS_HELM_HOME
 }
+
+htemplate() {
+  REPO=${1}
+  CHART=${2}
+  ARGUMENTS=${@:3}
+  BASE_FOLDER=/tmp/helm-fetch
+
+  mkdir -p ${BASE_FOLDER}
+  helm fetch --untar --untardir ${BASE_FOLDER} ${REPO}/${CHART}
+  helm template ${ARGUMENTS} ${BASE_FOLDER}/${CHART}
+  rm -rf ${BASE_FOLDER}/${CHART}
+}
