@@ -21,3 +21,7 @@ alias k="kubectl"
 
 # go helpers
 alias cdgo="cd $GOPATH/src"
+
+# gpg stuff
+alias gpg_lookup="gpg --list-secret-keys --keyid-format LONG" # use email with this
+alias gpg_export="gpg --armor --export" # use the sec key with this
