@@ -1,0 +1,25 @@
+[user]
+	name = {{ .git.name }}
+	email = {{ .git.email }}
+
+[init]
+  defaultBranch = main
+	templatedir = ~/.config/git/templates
+
+[pull]
+  rebase = true
+
+[fetch]
+  prune = true
+
+[core]
+  excludesFile = ~/.config/git/gitignore
+
+[commit]
+  template = ~/.config/git/message
+
+[blame]
+  date = relative
+
+[alias]
+  st = status

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+{{ if .is_darwin -}}
+grep -qxF "$(which zsh)" /etc/shells || echo "$(which zsh)" | sudo tee -a /etc/shells
+{{- end }}
+
+if [ "$SHELL" != "$(which zsh)" ]; then
+  echo "Setting shell to ZSH"
+  chsh -s $(which zsh)
+
+  # warning to user to restart chezmoi
+  echo "==========================================================="
+  echo "= RESTART YOUR SHELL SO THAT ZSH LOADS"
+  echo "==========================================================="
+  exit
+fi

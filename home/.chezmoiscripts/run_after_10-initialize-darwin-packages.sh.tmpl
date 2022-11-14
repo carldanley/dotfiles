@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+{{ if and .is_darwin (hasKey .packages "darwin") -}}
+set -eufo pipefail
+echo "Installing darwin packages"
+
+{{ $hasTaps := (hasKey .packages.darwin "taps") -}}
+{{- $hasBrews := (hasKey .packages.darwin "brews") -}}
+{{- $hasCasks := (hasKey .packages.darwin "casks") }}
+
+#########################
+## INSTALL BREW BUNDLE ##
+#########################
+
+{{ if or $hasTaps $hasBrews $hasCasks -}}
+brew bundle --no-lock --file=/dev/stdin <<EOF
+
+{{- if $hasTaps }}
+{{- range (.packages.darwin.taps | sortAlpha | uniq) }}
+tap "{{ . }}"
+{{- end }}
+{{- end -}}
+
+{{- if $hasBrews -}}
+{{- range ( .packages.darwin.brews | sortAlpha | uniq) }}
+brew "{{ . }}"
+{{- end }}
+{{- end -}}
+
+{{- if $hasCasks -}}
+{{- range ( .packages.darwin.casks | sortAlpha | uniq) }}
+cask "{{ . }}"
+{{- end }}
+{{- end }}
+
+EOF
+{{ end -}}
+
+##################################
+## OTHER PACKAGE MANAGERS BELOW ##
+##################################
+
+{{- end -}}

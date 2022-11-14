@@ -1,0 +1,59 @@
+{{- $name := promptStringOnce . "git.name" "Enter your Full Name for Git" -}}
+{{- $personalEmail := promptStringOnce . "git.email" "Enter your Personal email for Git" -}}
+{{- $workEmail := promptStringOnce . "git.workEmail" "Enter your Work email for Git" -}}
+
+{{- $wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
+{{- $darwin := eq .chezmoi.os "darwin" -}}
+
+sourceDir: "{{ .chezmoi.workingTree }}"
+data:
+  is_wsl: {{ $wsl }}
+  is_darwin: {{ $darwin }}
+  uname_arch: "{{ output "uname" "-m" | trim }}"
+
+  editor: "code --wait"
+
+  git:
+    name: {{ $name | quote }}
+    email: {{ $personalEmail | quote }}
+    workEmail: {{ $workEmail | quote }}
+
+  packages:
+    wsl:
+    # - asdf (installed via externals)
+    - zsh
+    - starship
+    - eza
+    - neofetch
+    - bat
+    - go
+
+    darwin:
+      # taps: []
+      # casks: []
+      brews:
+      - asdf
+      - zsh
+      - starship
+      - eza
+      - neofetch
+      - bat
+      - go
+
+    asdf:
+    - age
+    - sops
+    - flux2
+    - kubectl
+    - k9s
+    - helm
+    - talosctl
+    - talhelper
+    - terraform
+
+    krew:
+    - ctx
+
+    go:
+    - "sigs.k8s.io/kind@v0.21.0"
+

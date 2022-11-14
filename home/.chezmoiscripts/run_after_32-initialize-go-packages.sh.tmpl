@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+{{ if hasKey .packages "go" }}
+
+#########################
+## INSTALL GO PACKAGES ##
+#########################
+
+{{ range (.packages.go | sortAlpha | uniq) }}
+echo "Installing go package: {{ . }}"
+go install {{ . | quote }}
+{{ end }} # end for range
+{{ end }} # end for if (top)

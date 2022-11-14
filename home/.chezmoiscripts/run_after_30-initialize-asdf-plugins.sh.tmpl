@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+{{ if hasKey .packages "asdf" -}}
+echo "Installing asdf plugins"
+
+#####################
+## INSTALL PLUGINS ##
+#####################
+
+{{ range (.packages.asdf | sortAlpha | uniq) }}
+asdf plugin add {{ . | quote }}
+asdf install {{ . | quote }} latest
+asdf global {{ . | quote }} latest
+{{- end }} # end for if
+{{- end }} # end for range
