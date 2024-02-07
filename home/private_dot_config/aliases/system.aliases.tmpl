@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# ls to eza
+alias ls="eza -la --git --git-repos"
+
+# cat to bat
+{{ if .is_wsl }}
+  alias cat="batcat"
+{{ else if .is_darwin }}
+  alias cat="bat"
+{{ end }}

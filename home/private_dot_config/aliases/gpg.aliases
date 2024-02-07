@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+alias gpgcreate="gpg --full-gen-key"
+alias gpglist="gpg --list-secret-keys --keyid-format SHORT"
+alias gpgedit="gpg --edit-key"
+alias gpgexport="gpg --armor --export"
+
+gpgrestart() {
+  gpgconf --kill gpg-agent
+  gpgconf --launch gpg-agent
+}

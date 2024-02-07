@@ -23,6 +23,7 @@ plugins=(
   fzf-tab
   zsh-autosuggestions
   fast-syntax-highlighting
+  git-open
 )
 
 #######################################################################
@@ -38,7 +39,12 @@ source $XDG_BIN_HOME/z.sh
 #######################################################################
 # Aliases
 #######################################################################
-source $ZDOTDIR/aliases
+if [ -d $HOME/.config/aliases ] && [ ! -z "$(ls -A $HOME/.config/aliases)" ]; then
+  for file in $(find $HOME/.config/aliases -name "*.aliases")
+  do
+    source $file
+  done
+fi
 
 #######################################################################
 # Prompt
