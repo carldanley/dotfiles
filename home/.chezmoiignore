@@ -1,3 +1,5 @@
 README.md
 LICENSE
 DS_Store
+.config/oh-my-zsh/cache/**
+.config/zsh/.zcompdump*

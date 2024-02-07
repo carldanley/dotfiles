@@ -1,5 +1,0 @@
-# general aliases
-alias ls="eza -la --git --git-repos"
-
-# kubernetes
-alias k="kubectl"

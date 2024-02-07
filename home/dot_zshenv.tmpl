@@ -20,13 +20,7 @@ export ZSH="$XDG_CONFIG_HOME/oh-my-zsh"
 # Editor configs
 export EDITOR="{{ .editor }}"
 
-# Optionally load environment configs
-if [ -d $HOME/.config/env ] && [ ! -z "$(ls -A $HOME/.config/env)" ]; then
-  for file in $(find $HOME/.config/env -name "*.env")
-  do
-    source $file
-  done
-fi
-
 # Add binaries to path
 export PATH="$XDG_BIN_HOME:$PATH"
+export PATH="$HOME/.krew/bin:$PATH"
+export PATH="$XDG_DATA_HOME/go/bin:$PATH"

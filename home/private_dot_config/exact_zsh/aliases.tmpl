@@ -1,0 +1,12 @@
+# ls to eza
+alias ls="eza -la --git --git-repos"
+
+# kubernetes
+alias k="kubectl"
+
+# cat to bat
+{{ if .is_wsl }}
+  alias cat="batcat"
+{{ else if .is_darwin }}
+  alias cat="bat"
+{{ end }}
