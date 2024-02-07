@@ -20,6 +20,7 @@ $aws\
 $azure\
 $gcloud\
 $cmd_duration\
+$time\
 $line_break\
 $package\
 $c\
@@ -81,7 +82,8 @@ $battery\
 $os\
 $container\
 $shell\
-$character"""
+$character\
+"""
 
 [character]
 # Note the use of Catppuccin color 'maroon'
@@ -107,7 +109,7 @@ symbol = " "
 format = '[$symbol]($style)'
 
 [cmd_duration]
-format = "[$duration]($style) "
+format = "[$duration]($style)"
 style = "yellow"
 
 [conda]
@@ -292,6 +294,12 @@ format = '[$symbol]($style)'
 [terraform]
 symbol = "󱁢 "
 format = '[$symbol$workspace]($style)'
+
+[time]
+disabled = false
+time_format = "%r" # Hour:Minute Format
+style = "dimmed sapphire"
+format = '[$time]($style)'
 
 # palette tables should be last in the config ⚓️
 [palettes."Catppuccin-Macchiato"]
