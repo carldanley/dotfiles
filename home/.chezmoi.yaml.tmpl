@@ -1,6 +1,6 @@
 {{- $name := promptStringOnce . "git.name" "Enter your Full Name for Git" -}}
 {{- $personalEmail := promptStringOnce . "git.email" "Enter your Personal email for Git" -}}
-{{- $workEmail := promptStringOnce . "git.workEmail" "Enter your Work email for Git" -}}
+{{- $signingkey := promptStringOnce . "git.signingkey" "Enter your GPG signing key ID" -}}
 
 {{- $wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
 {{- $darwin := eq .chezmoi.os "darwin" -}}
@@ -16,11 +16,12 @@ data:
   git:
     name: {{ $name | quote }}
     email: {{ $personalEmail | quote }}
-    workEmail: {{ $workEmail | quote }}
+    signingkey: {{ $signingkey | quote }}
 
   packages:
     wsl:
     # - asdf (installed via externals)
+    # - gpg (already installed with WSL)
     - zsh
     - starship
     - eza
@@ -34,6 +35,8 @@ data:
       # casks: []
       brews:
       - asdf
+      - pinentry-mac
+      - gpg
       - zsh
       - starship
       - eza

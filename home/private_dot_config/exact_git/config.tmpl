@@ -1,10 +1,10 @@
 [user]
 	name = {{ .git.name }}
 	email = {{ .git.email }}
+  signingkey = {{ .git.signingkey }}
 
 [init]
   defaultBranch = main
-	templatedir = ~/.config/git/templates
 
 [push]
 	default = current
@@ -20,6 +20,10 @@
 
 [commit]
   template = ~/.config/git/message
+  gpgSign = true
+
+[tag]
+  gpgSign = true
 
 [blame]
   date = relative

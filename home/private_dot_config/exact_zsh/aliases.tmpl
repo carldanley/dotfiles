@@ -1,6 +1,9 @@
 # ls to eza
 alias ls="eza -la --git --git-repos"
 
+# general
+alias g="git"
+
 # kubernetes
 alias k="kubectl"
 
@@ -10,3 +13,17 @@ alias k="kubectl"
 {{ else if .is_darwin }}
   alias cat="bat"
 {{ end }}
+
+# git
+alias gl="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%an%C(reset)%C(bold yellow)%d%C(reset) %C(dim white)- %s%C(reset)' --all"
+
+# gpg
+alias gpgcreate="gpg --full-gen-key"
+alias gpglist="gpg --list-secret-keys --keyid-format SHORT"
+alias gpgedit="gpg --edit-key"
+alias gpgexport="gpg --armor --export"
+
+gpgrestart() {
+  gpgconf --kill gpg-agent
+  gpgconf --launch gpg-agent
+}
