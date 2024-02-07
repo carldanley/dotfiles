@@ -11,7 +11,7 @@ data:
   is_darwin: {{ $darwin }}
   uname_arch: "{{ output "uname" "-m" | trim }}"
 
-  editor: "code --wait"
+  editor: "vim"
 
   git:
     name: {{ $name | quote }}

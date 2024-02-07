@@ -33,3 +33,15 @@
 
 [color]
 	ui = auto
+
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
+
+[merge]
+  tool = vscode
+
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
+
+[diff]
+  tool = vscode
