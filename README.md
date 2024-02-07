@@ -1,5 +1,7 @@
 # Dotfiles
 
+> My attempt at organizing myself across machines via chezmoi.
+
 ## Secrets
 
 In order for chezmoi to run properly run with my dotfiles, you will need to:
