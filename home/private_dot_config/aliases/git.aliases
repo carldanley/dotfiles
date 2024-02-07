@@ -5,3 +5,4 @@ alias gl="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold gr
 alias go="git open"
 alias gp="git push"
 alias gc="git commit"
+alias gs="git status"
