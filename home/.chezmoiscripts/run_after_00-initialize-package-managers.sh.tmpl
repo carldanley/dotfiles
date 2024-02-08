@@ -21,6 +21,7 @@ fi
 
 if [[ $(command -v asdf) == "" ]]; then
   echo "Installing asdf prequisites"
+
   {{ if .is_wsl }}
     sudo apt install curl git
   {{ else if .is_darwin }}

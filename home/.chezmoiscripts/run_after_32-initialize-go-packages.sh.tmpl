@@ -10,4 +10,5 @@
 echo "Installing go package: {{ . }}"
 go install {{ . | quote }}
 {{ end }} # end for range
+
 {{ end }} # end for if (top)

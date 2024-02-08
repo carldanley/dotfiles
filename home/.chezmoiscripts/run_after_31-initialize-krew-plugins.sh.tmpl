@@ -27,4 +27,5 @@ echo "Installing krew plugins"
 {{ range (.packages.krew | sortAlpha | uniq) }}
 kubectl krew install {{ . | quote }}
 {{ end }} # end for range
+
 {{ end }} # end for if (top)
