@@ -14,3 +14,7 @@ if [ "$SHELL" != "$(which zsh)" ]; then
   echo "==========================================================="
   exit
 fi
+
+{{ if .is_darwin -}}
+grep -qF "ZDOTDIR" /etc/zshenv || echo 'export "ZDOTDIR=$HOME/.config/zsh"' | sudo tee /etc/zshenv
+{{- end }}

@@ -1,7 +1,9 @@
 [user]
-	name = {{ .git.name }}
-	email = {{ .git.email }}
+	name = Carl Danley
+	email = {{ (bitwardenFields "item" "4634d9cb-82be-485f-8a3f-5a5de9b6c523").email.value }}
   signingkey = {{ .git.signingkey }}
+
+{{ (bitwarden "item" "4634d9cb-82be-485f-8a3f-5a5de9b6c523").notes }}
 
 [init]
   defaultBranch = main

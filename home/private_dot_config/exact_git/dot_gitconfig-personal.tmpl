@@ -1,0 +1,49 @@
+[user]
+	name = Carl Danley
+	email = {{ (bitwardenFields "item" "99884cd2-03b4-40b1-ad7f-afd4f0eb9894").email.value }}
+  signingkey = {{ .git.signingkey }}
+
+{{ (bitwarden "item" "99884cd2-03b4-40b1-ad7f-afd4f0eb9894").notes }}
+
+[init]
+  defaultBranch = main
+
+[push]
+	default = current
+
+[pull]
+  rebase = true
+
+[fetch]
+  prune = true
+
+[core]
+  excludesFile = ~/.config/git/gitignore
+
+[commit]
+  template = ~/.config/git/message
+  gpgSign = true
+
+[tag]
+  gpgSign = true
+
+[blame]
+  date = relative
+
+[alias]
+  st = status
+
+[color]
+	ui = auto
+
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
+
+[merge]
+  tool = vscode
+
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
+
+[diff]
+  tool = vscode
