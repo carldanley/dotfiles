@@ -23,7 +23,7 @@ export BW_SESSION=""
 
 Since vaultwarden is self-hosted, run the following command:
 
-```
+```sh
 bw config server "https://my-bitwarden-instance.com"
 ```
 
@@ -31,9 +31,9 @@ bw config server "https://my-bitwarden-instance.com"
 
 In order to create a bitwarden session, perform the following commands:
 
-```
-$ bw login --apikey
-$ bw unlock
+```sh
+bw login --apikey
+bw unlock
 ```
 
 You should receive an `export BW_SESSION` message from the `bw unlock` command; add the `export ...` portion to the `$HOME/.config/env/bitwarden-session.env` file (which will be loaded by ZSH).
