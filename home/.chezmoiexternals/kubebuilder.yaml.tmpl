@@ -1,0 +1,12 @@
+{{ $url := "https://go.kubebuilder.io/dl/latest/" }}
+{{ if .is_darwin }}
+  {{ $url = print $url "darwin/arm64" }}
+{{ else if .is_wsl }}
+  {{ $url = print $url "linux/amd64" }}
+{{ end }}
+
+".local/bin/kubebuilder":
+  type: file
+  url: {{ $url | quote }}
+  refreshPeriod: 168h
+  executable: true
