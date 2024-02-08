@@ -17,4 +17,8 @@ fi
 
 {{ if .is_darwin -}}
 grep -qF "ZDOTDIR" /etc/zshenv || echo 'export "ZDOTDIR=$HOME/.config/zsh"' | sudo tee /etc/zshenv
+
+# we have to symlink these for mac because of some wonky issues with the zsh that's preinstalled
+ln -s $HOME/.zprofile $HOME/.config/zsh/.zprofile
+ln -s $HOME/.zshenv $HOME/.config/zsh/.zshenv
 {{- end }}
