@@ -10,3 +10,8 @@ alias lsg="eza -la --git --git-repos"
 {{ else if .is_darwin }}
   alias cat="bat"
 {{ end }}
+
+# open alias for is_wsl
+{{ if .is_wsl }}
+  alias open="explorer.exe"
+{{ end }}
