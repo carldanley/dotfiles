@@ -2,6 +2,3 @@
   type: git-repo
   url: https://github.com/asdf-vm/asdf.git
   refreshPeriod: 168h
-  clone:
-    args:
-    - --branch=v0.14.0
