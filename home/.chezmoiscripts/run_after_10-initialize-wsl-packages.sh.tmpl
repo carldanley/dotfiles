@@ -59,6 +59,17 @@ echo "Installing WSL packages"
   fi
 
 #####################
+## CUSTOM: GORELEASER ##
+#####################
+
+{{- else if eq . "goreleaser" }}
+  if [[ $(command -v goreleaser) == "" ]]; then
+    echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | sudo tee /etc/apt/sources.list.d/goreleaser.list
+    sudo apt update
+    sudo apt install goreleaser
+  fi
+
+#####################
 ## EVERYTHING ELSE ##
 #####################
 {{- else }}
