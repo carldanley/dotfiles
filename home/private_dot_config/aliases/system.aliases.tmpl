@@ -15,3 +15,8 @@ alias lsg="eza -la --git --git-repos"
 {{ if .is_wsl }}
   alias open="explorer.exe"
 {{ end }}
+
+# remove zone identifier files
+rm_zone_identifiers() {
+  find $1 -name "*Zone.Identifier" -type f -delete
+}
