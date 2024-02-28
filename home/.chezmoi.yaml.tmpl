@@ -29,10 +29,11 @@ data:
     - go-task
     - goreleaser
     # - git-cliff (todo: need to implement this)
+    - vault
 
     darwin:
-      # taps: []
-      # casks: []
+      taps:
+      - hashicorp/tap
       brews:
       - asdf
       - pinentry-mac
@@ -48,6 +49,7 @@ data:
       - go-task
       - goreleaser
       - git-cliff
+      - hashicorp/tap/vault
 
     asdf:
     - age
