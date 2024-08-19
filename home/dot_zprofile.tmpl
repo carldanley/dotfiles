@@ -1,8 +1,0 @@
-{{- if .is_darwin -}}
-eval "$(/opt/homebrew/bin/brew shellenv)"
-{{- else if .is_linux -}}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{- end }}
-
-# Tell ZSH where it should live
-export ZDOTDIR="$HOME/.config/zsh"
