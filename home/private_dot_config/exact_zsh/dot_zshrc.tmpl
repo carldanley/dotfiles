@@ -56,17 +56,8 @@ eval "$(starship init zsh)"
 #######################################################################
 export ASDF_CONFIG_FILE=$XDG_CONFIG_HOME/asdf/.asdfrc
 export ASDF_DATA_DIR=$XDG_DATA_HOME/asdf
-
-{{ if .is_darwin }}
-  export ASDF_DIR="/opt/homebrew/opt/asdf/libexec"
-  . "$(brew --prefix asdf)/libexec/asdf.sh"
-  . "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
-
-{{ else if .is_wsl }}
-  export ASDF_DIR="$XDG_BIN_HOME/asdf"
-  . "$XDG_BIN_HOME/asdf/asdf.sh"
-  . "$XDG_BIN_HOME/asdf/completions/asdf.bash"
-{{ end }}
+. "$(brew --prefix asdf)/libexec/asdf.sh"
+. "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
 
 #######################################################################
 # LOAD ENV FILES

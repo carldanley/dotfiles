@@ -1,11 +1,9 @@
 {{- $signingkey := promptStringOnce . "git.signingkey" "Enter your GPG signing key ID" -}}
-
-{{- $wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
 {{- $darwin := eq .chezmoi.os "darwin" -}}
 
 sourceDir: "{{ .chezmoi.workingTree }}"
 data:
-  is_wsl: {{ $wsl }}
+  is_linux: {{ (eq .chezmoi.os "linux") }}
   is_darwin: {{ $darwin }}
   uname_arch: "{{ output "uname" "-m" | trim }}"
 
@@ -15,28 +13,11 @@ data:
     signingkey: {{ $signingkey | quote }}
 
   packages:
-    wsl:
-    # - asdf (installed via externals)
-    # - gpg (already installed with WSL)
-    - zsh
-    - starship
-    - eza
-    - fzf
-    - neofetch
-    - bat
-    - tmux
-    - go
-    - go-task
-    - goreleaser
-    # - git-cliff (todo: need to implement this)
-    - vault
-
-    darwin:
+    brew:
       taps:
       - hashicorp/tap
       brews:
       - asdf
-      - pinentry-mac
       - gpg
       - zsh
       - starship
@@ -50,6 +31,7 @@ data:
       - goreleaser
       - git-cliff
       - hashicorp/tap/vault
+      - vim
 
     asdf:
     - age
@@ -70,4 +52,3 @@ data:
     go:
     - "sigs.k8s.io/kind@latest"
     - "github.com/google/addlicense@latest"
-

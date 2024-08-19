@@ -2,11 +2,13 @@
 
 > My attempt at organizing myself across machines via chezmoi.
 
-## Secrets
+## First Time Setup
+
+### Secrets
 
 In order for chezmoi to run properly run with my dotfiles, you will need to:
 
-### Setup the environment variables
+#### Setup the environment variables
 
 First, create a new file in `$HOME/.config/env/` called `bitwarden-session.env`.
 
@@ -19,7 +21,7 @@ export BW_CLIENTSECRET=""
 export BW_SESSION=""
 ```
 
-### Setup the base server
+#### Setup the base server
 
 Since vaultwarden is self-hosted, run the following command:
 
@@ -27,7 +29,7 @@ Since vaultwarden is self-hosted, run the following command:
 bw config server "https://my-bitwarden-instance.com"
 ```
 
-### Unlock the vault
+#### Unlock the vault
 
 In order to create a bitwarden session, perform the following commands:
 

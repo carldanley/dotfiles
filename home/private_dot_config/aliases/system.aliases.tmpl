@@ -5,16 +5,7 @@ alias ls="eza -la"
 alias lsg="eza -la --git --git-repos"
 
 # cat to bat
-{{ if .is_wsl }}
-  alias cat="batcat"
-{{ else if .is_darwin }}
-  alias cat="bat"
-{{ end }}
-
-# open alias for is_wsl
-{{ if .is_wsl }}
-  alias open="explorer.exe"
-{{ end }}
+alias cat="bat"
 
 # remove zone identifier files
 rm_zone_identifiers() {

@@ -2,10 +2,6 @@
 
 {{ if hasKey .packages "krew" }}
 
-########################
-## INSTALL KREW FIRST ##
-########################
-
 if [ ! -d "$HOME/.krew" ]; then
 (
   set -x; cd "$(mktemp -d)" &&
@@ -19,10 +15,6 @@ if [ ! -d "$HOME/.krew" ]; then
 fi
 
 echo "Installing krew plugins"
-
-#####################
-## INSTALL PLUGINS ##
-#####################
 
 {{ range (.packages.krew | sortAlpha | uniq) }}
 kubectl krew install {{ . | quote }}

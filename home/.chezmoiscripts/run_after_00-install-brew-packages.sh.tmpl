@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+{{ if hasKey .packages "brew" -}}
+set -eufo pipefail
+echo "Installing brew packages"
+
+{{ $hasTaps := (hasKey .packages.brew "taps") -}}
+{{- $hasBrews := (hasKey .packages.brew "brews") -}}
+{{- $hasCasks := (hasKey .packages.brew "casks") }}
+
+#########################
+## INSTALL BREW BUNDLE ##
+#########################
+
+{{ if or $hasTaps $hasBrews $hasCasks -}}
+brew bundle --no-lock --file=/dev/stdin <<EOF
+
+{{- if $hasTaps }}
+{{- range (.packages.brew.taps | sortAlpha | uniq) }}
+tap "{{ . }}"
+{{- end }}
+{{- end -}}
+
+{{- if $hasBrews -}}
+{{- range ( .packages.brew.brews | sortAlpha | uniq) }}
+brew "{{ . }}"
+{{- end }}
+{{- end -}}
+
+{{ if .is_darwin -}}
+brew pinentry-mac
+{{- end }}
+
+{{- if $hasCasks -}}
+{{- range ( .packages.brew.casks | sortAlpha | uniq) }}
+cask "{{ . }}"
+{{- end }}
+{{- end }}
+
+EOF
+{{ end -}}
+
+{{- end -}}

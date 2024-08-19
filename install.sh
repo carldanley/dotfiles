@@ -62,6 +62,15 @@ if [ -n "${DOTFILES_DEBUG-}" ]; then
   set -- "$@" --debug
 fi
 
+# eval brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# fix bitwarden-cli complaints
+export NODE_OPTIONS="--no-deprecation"
+
+# include the bitwarden-session envs
+. "${HOME}/.config/env/bitwarden-session.env"
+
 log_task "Running 'chezmoi $*'"
-# replace current process with chezmoi
 exec "${chezmoi}" "$@"

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ $(command -v brew) == "" ]]; then
+  echo "Installing Homebrew"
+  brew_install_script=$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
+  CI=1 bash -c "${brew_install_script}"
+fi
+
+{{ if .is_darwin -}}
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ else if .is_linux }}
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{- end }}

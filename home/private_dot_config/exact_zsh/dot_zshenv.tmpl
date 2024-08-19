@@ -14,9 +14,9 @@ export HISTFILESIZE=1000000000
 export SAVEHIST=1000000000
 
 # ZSH
+source $XDG_CONFIG_HOME/zsh/.zprofile
 export ZSH_DISABLE_COMPFIX=true
 export ZSH="$XDG_CONFIG_HOME/oh-my-zsh"
-source $HOME/.zprofile
 
 # Editor configs
 export EDITOR="{{ .editor }}"
