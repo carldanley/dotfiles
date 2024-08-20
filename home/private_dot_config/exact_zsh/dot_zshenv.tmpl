@@ -21,6 +21,10 @@ export ZSH="$XDG_CONFIG_HOME/oh-my-zsh"
 # Editor configs
 export EDITOR="{{ .editor }}"
 
+{{ if .is_linux -}}
+export TERM="xterm-256color"
+{{- end }}
+
 # Add binaries to path
 export PATH="$XDG_BIN_HOME:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
