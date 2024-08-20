@@ -11,3 +11,10 @@ alias cat="bat"
 rm_zone_identifiers() {
   find $1 -name "*Zone.Identifier" -type f -delete
 }
+
+{{ if .is_linux -}}
+restart_sound() {
+  systemctl --user restart wireplumber pipewire pipewire-pulse
+  rm -r ~/.config/pulse
+}
+{{- end }}
