@@ -25,10 +25,10 @@ tap "{{ . }}"
 {{- range ( .packages.brew.brews | sortAlpha | uniq) }}
 brew "{{ . }}"
 {{- end }}
-{{- end -}}
+{{- end }}
 
 {{ if .is_darwin -}}
-brew pinentry-mac
+brew "pinentry-mac"
 {{- end }}
 
 {{- if $hasCasks -}}

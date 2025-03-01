@@ -6,6 +6,6 @@ echo "Installing asdf plugins"
 {{ range (.packages.asdf | sortAlpha | uniq) }}
 asdf plugin add {{ . | quote }}
 asdf install {{ . | quote }} latest
-asdf global {{ . | quote }} latest
+asdf plugin update {{ . | quote }}
 {{- end }} # end for if
 {{- end }} # end for range
