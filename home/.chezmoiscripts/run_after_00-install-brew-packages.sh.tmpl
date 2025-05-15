@@ -13,7 +13,7 @@ echo "Installing brew packages"
 #########################
 
 {{ if or $hasTaps $hasBrews $hasCasks -}}
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --file=/dev/stdin <<EOF
 
 {{- if $hasTaps }}
 {{- range (.packages.brew.taps | sortAlpha | uniq) }}
