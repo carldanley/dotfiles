@@ -64,13 +64,16 @@ fi
 
 # eval brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+if [ -d /home/linuxbrew/.linuxbrew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 # fix bitwarden-cli complaints
 export NODE_OPTIONS="--no-deprecation"
 
 # include the bitwarden-session envs
-. "${HOME}/.config/env/bitwarden-session.env"
+source "${HOME}/.config/env/bitwarden-session.env"
 
 log_task "Running 'chezmoi $*'"
 exec "${chezmoi}" "$@"
