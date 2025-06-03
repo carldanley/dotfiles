@@ -7,4 +7,5 @@
 [includeIf "gitdir:~/Code/work/**/.git"]
   path = ~/.config/git/.gitconfig-work
 
-{{ (bitwarden "item" "4634d9cb-82be-485f-8a3f-5a5de9b6c523").notes }}
+[url "{{ onepasswordRead "op://qsnl7vyyiurldcmepp6dhbdgpe/qypbbrhl7f7vkc63gtsaupth44/ssh-host" }}"]
+  insteadOf = {{ onepasswordRead "op://qsnl7vyyiurldcmepp6dhbdgpe/qypbbrhl7f7vkc63gtsaupth44/host" }}

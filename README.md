@@ -6,41 +6,15 @@
 
 ### Secrets
 
-In order for chezmoi to run properly run with my dotfiles, you will need to:
+This chezmoi configuration uses 1Password to manage secret injection.
 
-#### Setup the environment variables
+### Templates
 
-First, create a new file in `$HOME/.config/env/` called `bitwarden-session.env`.
+To check whether or not a template is pulling secrets correctly, you can run a command like the following:
 
-Copy the following contents in this file:
-
-```sh
-#!/usr/bin/env bash
-export BW_CLIENTID=""
-export BW_CLIENTSECRET=""
-export BW_SESSION=""
+```bash
+chezmoi execute-template "$(cat ./home/private_dot_config/exact_git/dot_gitconfig-work.tmpl)"
 ```
-
-#### Setup the base server
-
-Since vaultwarden is self-hosted, run the following command:
-
-```sh
-bw config server "https://my-bitwarden-instance.com"
-```
-
-#### Unlock the vault
-
-In order to create a bitwarden session, perform the following commands:
-
-```sh
-bw login --apikey
-bw unlock
-```
-
-You should receive an `export BW_SESSION` message from the `bw unlock` command; add the `export ...` portion to the `$HOME/.config/env/bitwarden-session.env` file (which will be loaded by ZSH).
-
-Finally, reload your shell
 
 ## GPG Keys
 

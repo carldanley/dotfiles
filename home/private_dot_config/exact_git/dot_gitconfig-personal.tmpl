@@ -1,15 +1,15 @@
 [user]
-	name = Carl Danley
-	email = {{ (bitwardenFields "item" "99884cd2-03b4-40b1-ad7f-afd4f0eb9894").email.value }}
+  name = Carl Danley
+  email = {{ onepasswordRead "op://v3zq3xeutwehblkliml7uwkzhu/wnkkswl4unplufntk23fmaxj7y/email" }}
   signingkey = {{ .git.signingkey }}
 
-{{ (bitwarden "item" "99884cd2-03b4-40b1-ad7f-afd4f0eb9894").notes }}
+{{ onepasswordRead "op://v3zq3xeutwehblkliml7uwkzhu/wnkkswl4unplufntk23fmaxj7y/notesPlain" }}
 
 [init]
   defaultBranch = main
 
 [push]
-	default = current
+  default = current
 
 [pull]
   rebase = true
@@ -34,7 +34,7 @@
   st = status
 
 [color]
-	ui = auto
+  ui = auto
 
 [mergetool "vscode"]
   cmd = code --wait $MERGED
