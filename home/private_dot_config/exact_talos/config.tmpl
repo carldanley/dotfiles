@@ -1,8 +1,0 @@
-context: homelab
-contexts:
-  homelab:
-    endpoints: {{ onepasswordRead "op://homelab/talos/endpoints" }}
-    nodes: {{ onepasswordRead "op://homelab/talos/nodes" }}
-    ca: {{ onepasswordRead "op://homelab/talos/machine-ca-crt" }}
-    crt: {{ onepasswordRead "op://homelab/talos/talosconfig-crt" }}
-    key: {{ onepasswordRead "op://homelab/talos/talosconfig-key" }}

@@ -2,6 +2,22 @@
 
 {{ if hasKey .packages "go" }}
 
+###############################
+## MAKE SURE GO IS INSTALLED ##
+###############################
+
+if [[ $(command -v go) == "" ]]; then
+  goenv install 1.24.4 -f
+  goenv global 1.24.4
+fi
+
+if [[ $(command -v go) == "" ]]; then
+  echo "Go is not installed, please check your Go installation."
+  exit 1
+else
+  echo "Go is installed: $(go version)"
+fi
+
 #########################
 ## INSTALL GO PACKAGES ##
 #########################
