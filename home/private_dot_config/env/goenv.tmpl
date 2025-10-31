@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export GOENV_ROOT="#{XDG_DATA_HOME}/.goenv"
+export GOENV_ROOT="${XDG_DATA_HOME}/.goenv"
 export PATH="$GOENV_ROOT/bin:$PATH"
 export GOPRIVATE="{{ onepasswordRead "op://qsnl7vyyiurldcmepp6dhbdgpe/nfynlro7fkn3y5g4fjioysx34y/site" }}"
 eval "$(goenv init -)"
