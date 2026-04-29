@@ -6,10 +6,21 @@
 ## MAKE SURE GO IS INSTALLED ##
 ###############################
 
-if [[ $(command -v go) == "" ]]; then
-  goenv install 1.24.4 -f
-  goenv global 1.24.4
+export GOENV_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+
+if [[ $(command -v goenv) == "" ]]; then
+  echo "goenv is not installed, please check your goenv installation."
+  exit 1
 fi
+
+eval "$(goenv init -)"
+
+GO_VERSION="{{ .go.version }}"
+
+goenv install -s "$GO_VERSION"
+goenv global "$GO_VERSION"
+goenv rehash
 
 if [[ $(command -v go) == "" ]]; then
   echo "Go is not installed, please check your Go installation."
