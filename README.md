@@ -43,6 +43,11 @@ Use `--dry-run` to preview actions:
 ./install.sh --prereqs --dry-run
 ```
 
+Optional 1Password-backed imports are also available during prerequisites:
+
+- `--import-gpg` imports your GPG signing key bundle
+- `--import-talos` imports a Talos client config attachment
+
 ## Doctor
 
 Run doctor before a full apply if you want a readiness check:
@@ -59,6 +64,7 @@ Doctor currently checks:
 - `gpg`, `gpgconf`, and `pinentry-mac`
 - whether any secret GPG keys are installed
 - whether the local `chezmoi` signing key exists, has signing capability, and is expired or expiring soon
+- whether `talosctl` is installed and whether a readable Talos config exists
 
 You can adjust the expiry warning threshold:
 
@@ -112,6 +118,37 @@ After a successful import:
 - a local `chezmoi` config is written to `~/.config/chezmoi/chezmoi.yaml` with `data.git.signingkey`
 - the full `chezmoi` apply can use that signing key without prompting again
 
+## Talos Bootstrap
+
+`./install.sh --prereqs --import-talos` imports a Talos client config attachment from a 1Password item that you identify at runtime with `--talos-vault`, `--talos-item`, and optionally `--talos-file`, or with these environment variables:
+
+```bash
+export DOTFILES_TALOS_CONFIG_VAULT="<YOUR_1PASSWORD_VAULT>"
+export DOTFILES_TALOS_CONFIG_ITEM="<YOUR_TALOS_CONFIG_ITEM>"
+export DOTFILES_TALOS_CONFIG_FILE="<YOUR_TALOS_ATTACHMENT_NAME>"
+./install.sh --prereqs --import-talos
+```
+
+The Talos importer currently expects:
+
+- an item in 1Password that contains a file attachment with the Talos client config
+- a default attachment name of `talosconfig` unless you override it with `--talos-file`
+
+After a successful import:
+
+- the file is written to `~/.config/talos/config`
+- a machine-only secret reference is written to `~/.config/chezmoi/talos-config-secret-ref` so future `chezmoi` applies can keep `~/.config/talos/config` in sync
+- if `talosctl` is already installed, the importer validates the config with `talosctl config info`
+
+To test the Talos config manually:
+
+```bash
+TALOSCONFIG="$HOME/.config/talos/config" talosctl config info
+TALOSCONFIG="$HOME/.config/talos/config" talosctl health --wait-timeout 30s
+```
+
+`talosctl config info` verifies that the file is readable and has a usable current context. `talosctl health` is the real connectivity check against the cluster.
+
 ## Refreshing the GPG Bundle
 
 On the source machine, export the key material:
@@ -151,6 +188,32 @@ After prerequisites are in place:
 ```
 
 This runs `chezmoi init --apply` against the repository and performs the full dotfile provisioning flow.
+
+## Terminal Themes
+
+This repo currently manages `kitty`, not iTerm2, as the terminal with a committed default theme:
+
+- `kitty` theme: `Catppuccin-Mocha`
+- source: `home/private_dot_config/exact_kitty/current-theme.conf`
+
+iTerm2 color presets can still be installed manually when you want them.
+
+To import an `.itermcolors` preset in iTerm2:
+
+1. Open `iTerm2`
+2. Go to `Settings > Profiles > Colors`
+3. Click `Color Presets...`
+4. Choose `Import...`
+5. Select the `.itermcolors` file
+6. Re-open `Color Presets...` and choose the imported preset for the profile you want
+
+Example for Catppuccin Frappe:
+
+```bash
+curl -fsSL "https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/Catppuccin%20Frappe.itermcolors" -o ~/Downloads/Catppuccin-Frappe.itermcolors
+```
+
+Then import `~/Downloads/Catppuccin-Frappe.itermcolors` through the iTerm2 UI.
 
 ## Template Testing
 

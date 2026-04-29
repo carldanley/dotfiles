@@ -5,7 +5,7 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 Usage:
-  ./install-prerequisites.sh [--dry-run] [--import-gpg] [--gpg-vault VAULT] [--gpg-item ITEM]
+  ./install-prerequisites.sh [--dry-run] [--import-gpg] [--gpg-vault VAULT] [--gpg-item ITEM] [--import-talos] [--talos-vault VAULT] [--talos-item ITEM] [--talos-file FILE]
 
 Installs the minimum prerequisites needed before running the full dotfiles
 apply on a fresh machine:
@@ -17,9 +17,13 @@ apply on a fresh machine:
   - pinentry-mac (macOS only)
 
 Optional:
-  --import-gpg   Import GPG key material from 1Password after prerequisites install
-  --gpg-vault    1Password vault name that contains your GPG key bundle
-  --gpg-item     1Password item title or ID for your GPG key bundle
+  --import-gpg    Import GPG key material from 1Password after prerequisites install
+  --gpg-vault     1Password vault name that contains your GPG key bundle
+  --gpg-item      1Password item title or ID for your GPG key bundle
+  --import-talos  Import a Talos config attachment from 1Password after prerequisites install
+  --talos-vault   1Password vault name that contains your Talos config item
+  --talos-item    1Password item title or ID for your Talos config item
+  --talos-file    Attachment name for the Talos config file (default: talosconfig)
 EOF
 }
 
@@ -44,6 +48,7 @@ require_non_root() {
 
 dry_run=0
 import_gpg=0
+import_talos=0
 gpg_import_result="skipped"
 gpg_import_signing_key=""
 gpg_import_fingerprint=""
@@ -53,6 +58,13 @@ gpg_bundle_public_name="Public"
 gpg_bundle_secret_subkeys_name="SecretSubKeys"
 gpg_bundle_ownertrust_name="Ownertrust"
 gpg_bundle_revocation_name="Revocation"
+talos_import_result="skipped"
+talos_config_secret_ref=""
+talos_config_path="${XDG_CONFIG_HOME:-$HOME/.config}/talos/config"
+talos_secret_ref_path="${XDG_CONFIG_HOME:-$HOME/.config}/chezmoi/talos-config-secret-ref"
+talos_bundle_vault="${DOTFILES_TALOS_CONFIG_VAULT-}"
+talos_bundle_item="${DOTFILES_TALOS_CONFIG_ITEM-}"
+talos_bundle_file_name="${DOTFILES_TALOS_CONFIG_FILE:-talosconfig}"
 
 while (($# > 0)); do
   case "$1" in
@@ -68,6 +80,10 @@ while (($# > 0)); do
       import_gpg=1
       shift
       ;;
+    --import-talos)
+      import_talos=1
+      shift
+      ;;
     --gpg-vault)
       [[ $# -ge 2 ]] || error "Missing value for --gpg-vault"
       gpg_bundle_vault="$2"
@@ -76,6 +92,21 @@ while (($# > 0)); do
     --gpg-item)
       [[ $# -ge 2 ]] || error "Missing value for --gpg-item"
       gpg_bundle_item="$2"
+      shift 2
+      ;;
+    --talos-vault)
+      [[ $# -ge 2 ]] || error "Missing value for --talos-vault"
+      talos_bundle_vault="$2"
+      shift 2
+      ;;
+    --talos-item)
+      [[ $# -ge 2 ]] || error "Missing value for --talos-item"
+      talos_bundle_item="$2"
+      shift 2
+      ;;
+    --talos-file)
+      [[ $# -ge 2 ]] || error "Missing value for --talos-file"
+      talos_bundle_file_name="$2"
       shift 2
       ;;
     *)
@@ -294,13 +325,24 @@ ensure_gpg_bundle_location() {
   prompt_if_empty gpg_bundle_item "Enter the 1Password item title or ID for your GPG bundle"
 }
 
-ensure_op_read_access() {
-  if ! command -v op >/dev/null 2>&1; then
-    error "1Password CLI is required for --import-gpg."
+ensure_talos_bundle_location() {
+  if (( ! import_talos )) || (( dry_run )); then
+    return 0
   fi
 
-  if ! OP_BIOMETRIC_UNLOCK_ENABLED=true op vault get "$gpg_bundle_vault" >/dev/null 2>&1; then
-    error "Unable to access 1Password vault '${gpg_bundle_vault}'. Make sure the desktop app is unlocked and CLI integration is enabled."
+  prompt_if_empty talos_bundle_vault "Enter the 1Password vault name containing your Talos config"
+  prompt_if_empty talos_bundle_item "Enter the 1Password item title or ID for your Talos config"
+}
+
+ensure_op_vault_access() {
+  local vault_name="$1"
+
+  if ! command -v op >/dev/null 2>&1; then
+    error "1Password CLI is required for 1Password-backed imports."
+  fi
+
+  if ! OP_BIOMETRIC_UNLOCK_ENABLED=true op vault get "$vault_name" >/dev/null 2>&1; then
+    error "Unable to access 1Password vault '${vault_name}'. Make sure the desktop app is unlocked and CLI integration is enabled."
   fi
 }
 
@@ -340,11 +382,18 @@ has_local_secret_key() {
 }
 
 persist_chezmoi_signing_key() {
-  local config_dir config_file
-
   if [[ -z "$gpg_import_signing_key" ]]; then
     return 0
   fi
+
+  persist_chezmoi_data_value "data.git.signingkey" "$gpg_import_signing_key"
+  log_info "Persisted imported git signing key in local chezmoi config"
+}
+
+persist_chezmoi_data_value() {
+  local dotted_path="$1"
+  local value="$2"
+  local config_dir config_file
 
   config_dir="${HOME}/.config/chezmoi"
   config_file="${config_dir}/chezmoi.yaml"
@@ -352,18 +401,153 @@ persist_chezmoi_signing_key() {
   mkdir -p "$config_dir"
   chmod 700 "$config_dir"
 
-  if [[ -e "$config_file" ]]; then
-    log_warn "chezmoi config already exists at ${config_file}; leaving it unchanged. Ensure data.git.signingkey is set to '${gpg_import_signing_key}'."
+  if ! command -v ruby >/dev/null 2>&1; then
+    error "ruby is required to update the local chezmoi config at ${config_file}."
+  fi
+
+  CONFIG_FILE="$config_file" CONFIG_PATH="$dotted_path" CONFIG_VALUE="$value" ruby <<'RUBY'
+require "yaml"
+
+path = ENV.fetch("CONFIG_FILE")
+keys = ENV.fetch("CONFIG_PATH").split(".")
+value = ENV.fetch("CONFIG_VALUE")
+
+data =
+  if File.exist?(path) && !File.zero?(path)
+    YAML.load_file(path) || {}
+  else
+    {}
+  end
+
+abort "Invalid chezmoi config format at #{path}" unless data.is_a?(Hash)
+
+node = data
+keys[0...-1].each do |key|
+  current = node[key]
+  if current.nil?
+    node[key] = {}
+  elsif !current.is_a?(Hash)
+    abort "Cannot set #{keys.join('.')} because #{key} is not a map in #{path}"
+  end
+
+  node = node[key]
+end
+
+node[keys[-1]] = value
+File.write(path, YAML.dump(data))
+RUBY
+
+  chmod 600 "$config_file"
+}
+
+extract_first_matching_file_id() {
+  local item_json="$1"
+  local file_name="$2"
+
+  jq -r --arg name "$file_name" '[.files[]? | select(.name == $name) | .id][0] // empty' <<<"$item_json"
+}
+
+persist_talos_secret_ref() {
+  if [[ -z "$talos_config_secret_ref" ]]; then
     return 0
   fi
 
-  cat > "$config_file" <<EOF
-data:
-  git:
-    signingkey: "${gpg_import_signing_key}"
-EOF
-  chmod 600 "$config_file"
-  log_info "Wrote local chezmoi config with imported git signing key"
+  mkdir -p "$(dirname "$talos_secret_ref_path")"
+  chmod 700 "$(dirname "$talos_secret_ref_path")"
+  printf '%s\n' "$talos_config_secret_ref" > "$talos_secret_ref_path"
+  chmod 600 "$talos_secret_ref_path"
+  log_info "Persisted Talos config secret reference in ${talos_secret_ref_path}"
+}
+
+backup_existing_talos_config() {
+  local backup_dir backup_file timestamp
+
+  if [[ ! -f "$talos_config_path" ]]; then
+    return 0
+  fi
+
+  backup_dir="${HOME}/.local/share/dotfiles-backups/talos"
+  timestamp="$(date '+%Y%m%d%H%M%S')"
+  backup_file="${backup_dir}/config.${timestamp}"
+
+  mkdir -p "$backup_dir"
+  install -m 600 "$talos_config_path" "$backup_file"
+  log_info "Backed up existing Talos config to ${backup_file}"
+}
+
+validate_talos_config() {
+  if ! command -v talosctl >/dev/null 2>&1; then
+    return 0
+  fi
+
+  TALOSCONFIG="$talos_config_path" talosctl config info >/dev/null
+}
+
+import_talos_from_1password() {
+  local item_json item_id vault_id file_id temp_dir temp_file config_dir
+
+  if (( ! import_talos )); then
+    return 0
+  fi
+
+  if (( dry_run )); then
+    talos_import_result="dry-run"
+    return 0
+  fi
+
+  ensure_talos_bundle_location
+  ensure_op_vault_access "$talos_bundle_vault"
+
+  item_json="$(OP_BIOMETRIC_UNLOCK_ENABLED=true op item get "$talos_bundle_item" --vault "$talos_bundle_vault" --format json)"
+  item_id="$(jq -r '.id' <<<"$item_json")"
+  vault_id="$(jq -r '.vault.id // empty' <<<"$item_json")"
+  file_id="$(extract_first_matching_file_id "$item_json" "$talos_bundle_file_name")"
+
+  if [[ -z "$item_id" || "$item_id" == "null" ]]; then
+    error "Could not find 1Password item '${talos_bundle_item}' in vault '${talos_bundle_vault}'."
+  fi
+
+  if [[ -z "$vault_id" || "$vault_id" == "null" ]]; then
+    error "Could not determine the 1Password vault ID for Talos config item '${talos_bundle_item}'."
+  fi
+
+  if [[ -z "$file_id" || "$file_id" == "null" ]]; then
+    error "Could not find Talos attachment '${talos_bundle_file_name}' on item '${talos_bundle_item}'."
+  fi
+
+  talos_config_secret_ref="op://${vault_id}/${item_id}/${file_id}?attr=content"
+
+  temp_dir="$(mktemp -d)"
+  chmod 700 "$temp_dir"
+  trap 'rm -rf "$temp_dir"' RETURN
+
+  temp_file="${temp_dir}/talosconfig"
+  : > "$temp_file"
+
+  log_info "Downloading Talos config attachment '${talos_bundle_file_name}' from 1Password item '${talos_bundle_item}'"
+  OP_BIOMETRIC_UNLOCK_ENABLED=true op read "$talos_config_secret_ref" > "$temp_file"
+
+  if [[ ! -s "$temp_file" ]]; then
+    error "Downloaded Talos config is empty."
+  fi
+
+  config_dir="$(dirname "$talos_config_path")"
+  mkdir -p "$config_dir"
+  chmod 700 "$config_dir"
+
+  backup_existing_talos_config
+  install -m 600 "$temp_file" "$talos_config_path"
+  persist_talos_secret_ref
+
+  if validate_talos_config; then
+    talos_import_result="imported"
+  else
+    talos_import_result="imported-unvalidated"
+    log_warn "Talos config was written to ${talos_config_path}, but talosctl could not validate it yet."
+  fi
+
+  rm -rf "$temp_dir"
+  trap - RETURN
 }
 
 import_gpg_from_1password() {
@@ -380,7 +564,7 @@ import_gpg_from_1password() {
   fi
 
   ensure_gpg_bundle_location
-  ensure_op_read_access
+  ensure_op_vault_access "$gpg_bundle_vault"
   ensure_gpg_pinentry
 
   if [[ -t 0 ]] || [[ -t 1 ]]; then
@@ -474,7 +658,19 @@ EOF
     if [[ -n "$gpg_import_fingerprint" ]]; then
       printf '     Fingerprint: `%s`\n' "$gpg_import_fingerprint"
     fi
-    printf '%s\n' '  5. Run `./install.sh` for the full chezmoi apply.'
+    if [[ "$talos_import_result" == "imported" ]]; then
+      printf '  5. Talos config was imported to `%s` and validated with `talosctl config info`.\n' "$talos_config_path"
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    elif [[ "$talos_import_result" == "imported-unvalidated" ]]; then
+      printf '  5. Talos config was imported to `%s`, but it could not be validated yet.\n' "$talos_config_path"
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    elif [[ "$talos_import_result" == "dry-run" ]]; then
+      printf '%s\n' '  5. Re-run with `--import-talos` if you want to import your Talos config from 1Password.'
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    else
+      printf '%s\n' '  5. Re-run with `--import-talos` if you want Talos config imported from 1Password.'
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    fi
   elif [[ "$gpg_import_result" == "imported-no-signing-key" ]]; then
     printf '%s\n' '  4. The GPG bundle was imported, but no usable local secret signing key was found for the configured signing key.'
     if [[ -n "$gpg_import_signing_key" ]]; then
@@ -483,12 +679,40 @@ EOF
     printf '%s\n' '     This usually means the bundle contains secret subkeys but your signing capability lives on the primary key.'
     printf '%s\n' '     Export the full secret key instead, or create a dedicated signing subkey and update the 1Password bundle.'
     printf '%s\n' '  5. After updating the bundle, re-run `./install.sh --prereqs --import-gpg`.'
+    if [[ "$talos_import_result" == "imported" ]]; then
+      printf '  6. Talos config was imported to `%s` and validated with `talosctl config info`.\n' "$talos_config_path"
+    elif [[ "$talos_import_result" == "imported-unvalidated" ]]; then
+      printf '  6. Talos config was imported to `%s`, but it could not be validated yet.\n' "$talos_config_path"
+    fi
   elif [[ "$gpg_import_result" == "dry-run" ]]; then
     printf '%s\n' '  4. Re-run with `--import-gpg` if you want to import your GPG bundle from 1Password.'
-    printf '%s\n' '  5. Run `./install.sh` for the full chezmoi apply.'
+    if [[ "$talos_import_result" == "imported" ]]; then
+      printf '  5. Talos config was imported to `%s` and validated with `talosctl config info`.\n' "$talos_config_path"
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    elif [[ "$talos_import_result" == "imported-unvalidated" ]]; then
+      printf '  5. Talos config was imported to `%s`, but it could not be validated yet.\n' "$talos_config_path"
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    elif [[ "$talos_import_result" == "dry-run" ]]; then
+      printf '%s\n' '  5. Re-run with `--import-talos` if you want to import your Talos config from 1Password.'
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    else
+      printf '%s\n' '  5. Run `./install.sh` for the full chezmoi apply.'
+    fi
   else
     printf '%s\n' '  4. Import or create your GPG signing key. Re-run with `--import-gpg` to import it from 1Password.'
-    printf '%s\n' '  5. Run `./install.sh` for the full chezmoi apply.'
+    if [[ "$talos_import_result" == "imported" ]]; then
+      printf '  5. Talos config was imported to `%s` and validated with `talosctl config info`.\n' "$talos_config_path"
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    elif [[ "$talos_import_result" == "imported-unvalidated" ]]; then
+      printf '  5. Talos config was imported to `%s`, but it could not be validated yet.\n' "$talos_config_path"
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    elif [[ "$talos_import_result" == "dry-run" ]]; then
+      printf '%s\n' '  5. Re-run with `--import-talos` if you want to import your Talos config from 1Password.'
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    else
+      printf '%s\n' '  5. Re-run with `--import-talos` if you want Talos config imported from 1Password.'
+      printf '%s\n' '  6. Run `./install.sh` for the full chezmoi apply.'
+    fi
   fi
 }
 
@@ -496,6 +720,7 @@ ensure_xcode_command_line_tools
 ensure_homebrew
 install_brew_prerequisites
 import_gpg_from_1password
+import_talos_from_1password
 
 if ((dry_run)); then
   print_next_steps

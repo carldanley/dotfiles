@@ -14,7 +14,7 @@ Usage:
 Modes:
   default        Install and run chezmoi against this repository
   --prereqs      Install the minimum prerequisites needed on a fresh machine
-                  Pass through args like --dry-run or --import-gpg
+                  Pass through args like --dry-run, --import-gpg, or --import-talos
   --doctor       Run local readiness checks before a full apply
 EOF
 }

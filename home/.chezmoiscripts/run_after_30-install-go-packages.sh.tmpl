@@ -14,12 +14,11 @@ if [[ $(command -v goenv) == "" ]]; then
   exit 1
 fi
 
-eval "$(goenv init -)"
-
 GO_VERSION="{{ .go.version }}"
 
 goenv install -s "$GO_VERSION"
 goenv global "$GO_VERSION"
+eval "$(goenv init -)"
 goenv rehash
 
 if [[ $(command -v go) == "" ]]; then

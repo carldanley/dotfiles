@@ -1,0 +1,7 @@
+{{- $secretRefPath := joinPath .chezmoi.homeDir ".config" "chezmoi" "talos-config-secret-ref" -}}
+{{- if stat $secretRefPath -}}
+{{-   $configRef := output "cat" $secretRefPath | trim -}}
+{{-   if $configRef -}}
+{{-     onepasswordRead $configRef -}}
+{{-   end -}}
+{{- end -}}

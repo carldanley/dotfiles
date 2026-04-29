@@ -231,6 +231,31 @@ check_goenv() {
   fi
 }
 
+check_talosctl() {
+  local talos_config_path
+
+  if ! command -v talosctl >/dev/null 2>&1; then
+    warn "talosctl is not installed"
+    return 0
+  fi
+
+  ok "talosctl is installed"
+
+  talos_config_path="${TALOSCONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/talos/config}"
+  if [[ ! -f "$talos_config_path" ]]; then
+    warn "Talos config is missing at ${talos_config_path}"
+    return 0
+  fi
+
+  ok "Talos config exists at ${talos_config_path}"
+
+  if TALOSCONFIG="$talos_config_path" talosctl config info >/dev/null 2>&1; then
+    ok "Talos config is readable by talosctl"
+  else
+    warn "Talos config exists, but talosctl could not read the current context"
+  fi
+}
+
 check_chezmoi_signing_key() {
   local config_file configured_key key_dump key_line key_id expires caps expiry_date warn_epoch now
 
@@ -330,4 +355,5 @@ check_gpg_tools
 check_gpg_keyring
 check_chezmoi_signing_key
 check_goenv
+check_talosctl
 print_summary
