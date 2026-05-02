@@ -4,6 +4,8 @@
 # -u: exit on unset variables
 set -eu
 
+export OP_BIOMETRIC_UNLOCK_ENABLED="${OP_BIOMETRIC_UNLOCK_ENABLED:-true}"
+
 usage() {
   cat <<'EOF'
 Usage:

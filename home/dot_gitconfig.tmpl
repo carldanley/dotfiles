@@ -7,5 +7,8 @@
 [includeIf "gitdir:~/Code/work/**/.git"]
   path = ~/.config/git/.gitconfig-work
 
+[core]
+  excludesFile = ~/.config/git/gitignore
+
 [url "{{ onepasswordRead "op://qsnl7vyyiurldcmepp6dhbdgpe/qypbbrhl7f7vkc63gtsaupth44/ssh-host" }}"]
   insteadOf = {{ onepasswordRead "op://qsnl7vyyiurldcmepp6dhbdgpe/qypbbrhl7f7vkc63gtsaupth44/host" }}

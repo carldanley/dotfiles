@@ -83,6 +83,7 @@ Before running the full install, open and unlock the 1Password app and enable CL
 3. Turn on `Integrate with 1Password CLI`
 
 The CLI may ask for approval through the desktop app while reading vault data.
+This repo also exports `OP_BIOMETRIC_UNLOCK_ENABLED=true` by default for shell sessions and bootstrap scripts unless you override it.
 
 If you want to verify the CLI manually:
 
