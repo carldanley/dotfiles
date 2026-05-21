@@ -226,6 +226,7 @@ install_brew_prerequisites() {
     cat <<'EOF'
 brew "chezmoi"
 brew "gnupg"
+brew "ripgrep"
 cask "1password-cli"
 EOF
   )

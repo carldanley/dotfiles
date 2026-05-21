@@ -27,6 +27,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 - Homebrew
 - `chezmoi`
 - `gnupg`
+- `ripgrep`
 - `pinentry-mac`
 - `1password-cli`
 - `1password` app if it is not already installed
