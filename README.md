@@ -25,10 +25,12 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 - Xcode Command Line Tools check
 - Homebrew
+- `buf`
 - `chezmoi`
 - `gnupg`
 - `ripgrep`
 - `rtk`
+- `rust` for `cargo`
 - `pinentry-mac`
 - `1password-cli`
 - `1password` app if it is not already installed

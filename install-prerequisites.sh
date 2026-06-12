@@ -224,10 +224,12 @@ install_brew_prerequisites() {
 
   bundle=$(
     cat <<'EOF'
+brew "buf"
 brew "chezmoi"
 brew "gnupg"
 brew "ripgrep"
 brew "rtk"
+brew "rust"
 cask "1password-cli"
 EOF
   )
