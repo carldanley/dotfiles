@@ -227,6 +227,7 @@ install_brew_prerequisites() {
 brew "chezmoi"
 brew "gnupg"
 brew "ripgrep"
+brew "rtk"
 cask "1password-cli"
 EOF
   )
